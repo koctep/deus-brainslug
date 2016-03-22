@@ -1,0 +1,51 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "rules": {
+        "semi": 2,
+
+        //Require Constructors to Use Initial Caps
+        "new-cap": [2, {"capIsNew": false, "newIsCapExceptions": ["get", "eoBlockWatcher"]}],
+
+        // "bitwise" : true, // true: Prohibit bitwise operators (&, |, ^, etc.)
+        "no-bitwise": 2,
+
+        // "curly" : true, // true: Require {} for every new block or scope
+        "curly": [2, "all"],
+
+        // "eqeqeq" : true, // true: Require triple equals (===) for comparison
+        "eqeqeq": [2, "smart"],
+
+        // "forin" : true, // true: Require filtering for..in loops with obj.hasOwnProperty()
+        "guard-for-in": 2,
+
+        // "freeze" : true, // true: prohibits overwriting prototypes of native objects such as Array, Date etc.
+        "no-extend-native": 2,
+
+        // "indent" : 4, // {int} Number of spaces to use for indentation
+        "indent": [2, 2, { "SwitchCase": 1 }],
+
+        // "noarg" : true, // true: Prohibit use of `arguments.caller` and `arguments.callee`
+        "no-caller": 2,
+
+        // "noempty" : true, // true: Prohibit use of empty blocks
+        "no-empty": 2,
+
+        // "nonbsp" : true, // true: Prohibit "non-breaking whitespace" characters.
+        "no-irregular-whitespace": 2,
+
+        // "undef" : true, // true: Require all non-global variables to be declared (prevents global leaks)
+        "no-undef": 2,
+
+        // "unused" : true, // true: Require all defined variables be used
+        "no-unused-vars": [2, {"vars": "all", "args": "none"}],
+
+        // "strict" : true, // true: Requires all functions run in ES5 Strict Mode
+        "strict": 0
+    }
+}
