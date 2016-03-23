@@ -1,4 +1,4 @@
-import template from './about.html';
+import template from './about.jade';
 import controller from './about.controller';
 import './about.scss';
 

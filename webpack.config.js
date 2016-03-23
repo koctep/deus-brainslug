@@ -11,7 +11,8 @@ module.exports = {
         ],
         loaders: [
             { test: /\.js$/, exclude: [/app\/lib/, /node_modules/], loader: 'ng-annotate!babel' },
-            { test: /\.html$/, loader: 'raw' },
+            { test: /\.jade$/, loader: 'html!jade-html' },
+            { test: /\.html$/, loader: 'html' },
             { test: /\.scss$/, loader: 'style!css!sass' },
             { test: /\.css$/, loader: 'style!css' },
             { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },

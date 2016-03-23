@@ -6,6 +6,13 @@
             "jsx": true
         }
     },
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "globals ": {
+        "console": true
+    },
     "rules": {
         "semi": 2,
 
