@@ -1,0 +1,10 @@
+<div>
+  <h1>{{ vm.name }}</h1>
+  <div>{{vm.stations.length}}</div>
+  <table>
+    <tr ng-repeat='s in vm.stations'>
+      <td>{{s.name}}</td>
+      <td>{{s.password}}</td>
+    </tr>
+  </table>
+</div>
