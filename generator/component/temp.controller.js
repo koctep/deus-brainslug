@@ -1,5 +1,5 @@
 class <%= upCaseName %>Controller {
-  constructor() {
+  constructor($rootScope) {
     'ngInject';
 
     this.name = '<%= name %>';
