@@ -1,6 +1,6 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
-import Common from './common/common';
+import Navbar from './navbar/navbar';
 import Components from './components/components';
 import AppComponent from './app.component';
 
@@ -14,8 +14,8 @@ var app = angular.module('app', [
   angularMaterial,
   angularAnimate,
   uiRouter,
-  Common.name,
-  Components.name
+  Components.name,
+  Navbar.name
 ]);
 
 
