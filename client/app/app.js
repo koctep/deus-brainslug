@@ -24,11 +24,13 @@ angular.module('app', [
 ])
 
 .constant('$cfgDefault', {
-  reqTimeout: 5,
-  couchDbUrl: 'http://localhost:5984'
+  reqTimeout: 5000,
+  couchDbUrl: 'http://localhost:5984',
+  couchDb: 'brainslug',
+  maxStationId: 100000
 })
 
-.config(($locationProvider, $qProvider, $urlRouterProvider) => {
+.config(($locationProvider, $qProvider, $urlRouterProvider, $httpProvider) => {
   "ngInject";
 
   // @see: https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions
@@ -36,6 +38,7 @@ angular.module('app', [
   $locationProvider.html5Mode(true).hashPrefix('!');
   $qProvider.errorOnUnhandledRejections(false);
   $urlRouterProvider.otherwise('/init');
+  $httpProvider.defaults.headers.post = {'Content-Type': 'application/json'};
 })
 
 .run(($rootScope, $cfg) => {
@@ -58,27 +61,72 @@ angular.module('app', [
   return res;
 })
 
-.service('$couch', function($http, $q, $cfg) {
+.service('$couch', function($http, $q, $cfg, $mdToast) {
   'ngInject';
 
   return {
-    view: function() {
+    view: function(view, p) {
       var res = $q.defer();
-      $http.get($cfg.couchDbUrl, {timeout: $cfg.reqTimeout})
-        .then(function() {
-          res.resolve([1,2]);
+      var params = "";
+      angular.forEach(p || {}, function(v, k) {
+        params += '&' + k + '=' + encodeURI(v);
+      });
+      var url = [$cfg.couchDbUrl, $cfg.couchDb, "_design", "brainslug", "_view", view].join('/') + '?ts=' + Date.now() + params;
+      var opts = {};
+      ($cfg.reqTimeout) ? opts.timeout = $cfg.reqTimeout : null;
+      console.debug("opts %o", opts);
+      $http.get(url, opts)
+        .then(function(response) {
+          res.resolve(response.data.rows);
         })
         .catch(function(response) {
           console.debug("failed, response %o", response);
-          res.reject(response);
+          $mdToast.showSimple("failed query database");
+          res.resolve(null);
         })
       ;
+      return res.promise;
+    },
+    doc: function(id) {
+      var res = $q.defer();
+      var url = [$cfg.couchDbUrl, $cfg.couchDb, id].join('/');
+      $http.get(url)
+        .then(function(response) {
+          res.resolve(response.data);
+        })
+        .catch(function(response) {
+          res.resolve(null);
+        });
+      return res.promise;
+    },
+    publish: function(doc) {
+      var res = $q.defer();
+      var url = [$cfg.couchDbUrl, $cfg.couchDb].join('/');
+      $http.post(url, doc)
+        .then(function(response) {
+          res.resolve(response.data);
+        })
+        .catch(function(response) {
+          res.reject(response);
+        });
+      return res.promise;
+    },
+    delete: function(id) {
+      var res = $q.defer();
+      var url = [$cfg.couchDbUrl, $cfg.couchDb, encodeURI(id)].join('/');
+      $http.delete(url)
+        .then(function(response) {
+          res.resolve(response.data);
+        })
+        .catch(function(response) {
+          res.reject(response);
+        });
       return res.promise;
     }
   };
 })
 
-.service('$api', ($couch, $rootScope, $reloader, $log, $q, $mdToast)  => {
+.service('$api', ($couch, $rootScope, $reloader, $q)  => {
   'ngInject';
 
   $rootScope.couch = $couch;
@@ -95,16 +143,36 @@ angular.module('app', [
     lsStations: function() {
       var res = $q.defer();
 
-      $couch.view()
+      $couch.view('stations', {include_docs: true})
+        .then(function(response) {
+          var r = (response || []).map(function(v) {
+            return v.doc;
+          });
+          res.resolve(r);
+        });
+      return res.promise;
+    },
+    getStation: function(id) {
+      var res = $q.defer();
+
+      $couch.doc(id)
         .then(function(response) {
           res.resolve(response);
-        })
-        .catch(function(response) {
-          $mdToast.showSimple("failed query database");
-          res.resolve(null);
-        })
-      ;
+        });
       return res.promise;
+    },
+    publish: function(doc) {
+      var res = $q.defer();
+
+      $couch.publish(doc)
+        .then(function(response) {
+          res.resolve(response);
+        });
+      return res.promise;
+    },
+    delete: function(doc) {
+      doc._deleted = true;
+      return this.publish(doc);
     }
   };
 })

@@ -3,8 +3,10 @@
   <div>{{vm.stations.length}}</div>
   <table>
     <tr ng-repeat='s in vm.stations'>
-      <td>{{s.name}}</td>
-      <td>{{s.password}}</td>
+      <td><a ui-sref='station({id: s._id})'>{{s.name}}</a></td>
+    </tr>
+    <tr>
+      <td><a ui-sref='station({id: "add"})'>Add new</a></td>
     </tr>
   </table>
 </div>

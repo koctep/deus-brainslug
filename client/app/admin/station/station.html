@@ -1,0 +1,77 @@
+<div>
+  <a ui-sref='stations'>Stations list</a>
+  <table>
+    <tr>
+      <td>
+        <h1>{{ vm.name }} {{vm.station._id}}</h1>
+      </td>
+      <td>
+        <md-button ng-click='vm.delete()' ng-disable='!vm.hideId' ng-hide='!vm.hideId'>Delete</md-button>
+        &nbsp;
+      </td>
+    </tr>
+    <tr ng-hide='vm.hideId'>
+      <td>
+        <md-input-container>
+          <label>Id</label>
+          <input type='number' ng-disabled='vm.hideId' ng-model='vm.station._id'>
+        </md-input-container>
+      </td>
+      <td>
+        <md-button ng-click='vm.generateId()'>Generate Id</md-button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md-input-container>
+          <label>Name</label>
+          <input ng-model='vm.station.name'>
+        </md-input-container>
+      </td>
+      <td>
+        <md-input-container>
+          <md-checkbox ng-model='vm.station.enabled' aria-label='Enabled'>Enabled</md-checkbox>
+        </md-input-container>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md-input-container>
+          <label>Password</label>
+          <input type='{{vm.showPass ? "text" : "password"}}' ng-model='vm.station.password'>
+        </md-input-container>
+      </td>
+      <td>
+        <md-input-container>
+          <md-checkbox ng-model='vm.showPass' aria-label='Show password'>Show password</md-checkbox>
+        </md-input-container>
+      </td>
+    </tr>
+    <tr>
+      <td colspan='2'>
+        <md-input-container>
+          <label>Descrption for master</label>
+          <textarea ng-model='vm.station.description.master'></textarea>
+        </md-input-container>
+      </td>
+    </tr>
+    <tr>
+      <td colspan='2'>
+        <md-input-container>
+          <label>Descrption for operator</label>
+          <textarea ng-model='vm.station.description.operator'></textarea>
+        </md-input-container>
+      </td>
+    </tr>
+    <tr>
+      <td colspan='2'>
+        <md-input-container>
+          <md-button ng-click='vm.hideId ? vm.update() : vm.add()'>Save</md-button>
+          <md-button ng-click='vm.dismissChanges()'>Dismiss changes</md-button>
+          <md-button ng-click='vm.erase()'>Erase all</md-button>
+          <md-button ng-click='vm.copy()'>Copy acls</md-button>
+        </md-input-container>
+      </td>
+    </tr>
+  </table>
+</div>
