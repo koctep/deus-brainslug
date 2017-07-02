@@ -13,6 +13,8 @@ import AppController from './app.controller';
 
 import Admin from './admin/admin';
 
+import appConfig from './app.config.json';
+
 angular.module('app', [
   angularMaterial,
   angularAnimate,
@@ -23,12 +25,7 @@ angular.module('app', [
   Admin.name,
 ])
 
-.constant('$cfgDefault', {
-  reqTimeout: 5000,
-  couchDbUrl: 'http://localhost:5984',
-  couchDb: 'brainslug',
-  maxStationId: 100000
-})
+.constant('$cfgDefault', appConfig)
 
 .config(($locationProvider, $qProvider, $urlRouterProvider, $httpProvider) => {
   "ngInject";
