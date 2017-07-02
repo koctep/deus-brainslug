@@ -1,0 +1,7 @@
+<md-dialog>
+  <md-dialog-content>
+    <div ng-repeat='v in vm.stations'>
+      <a ng-click='$parent.vm.choose(v._id)'>{{v.name}}</a>
+    </div>
+  </md-dialog-content>
+</md-dialog>

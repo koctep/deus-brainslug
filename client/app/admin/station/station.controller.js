@@ -1,5 +1,10 @@
+import angular from 'angular';
+
+import template from './copy_acl.html';
+import controller from './copy_acl_controller';
+
 class StationController {
-  constructor($rootScope, $api, $stateParams, $cfg, $state, $mdToast) {
+  constructor($rootScope, $api, $stateParams, $cfg, $state, $mdToast, $mdDialog) {
     'ngInject';
 
     this.name = 'station';
@@ -11,6 +16,7 @@ class StationController {
     this.$mdToast = $mdToast;
     this.$cfg = $cfg;
     this.$root = $rootScope;
+    this.$mdDialog = $mdDialog;
 
     this.hideId = true;
     this.station = {};
@@ -71,6 +77,23 @@ class StationController {
       .then(function() {
         $this.$state.go('stations');
       });
+  }
+
+  copyAcl() {
+    var $this = this;
+    $this.$mdDialog.show({
+      clickOutsideToClose: true,
+      template,
+      controller,
+      controllerAs: 'vm'
+    })
+    .then(function(stationId) {
+      console.debug('copy acl from %o', stationId);
+      $this.$api.getStation(stationId)
+        .then(function(station) {
+          $this.station.acl = angular.extend({}, station.acl);
+        });
+    });
   }
 }
 
