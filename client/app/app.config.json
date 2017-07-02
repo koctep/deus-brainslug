@@ -1,0 +1,6 @@
+{
+  "reqTimeout": 5000,
+  "couchDbUrl": "http://localhost:5984",
+  "couchDb": "brainslug",
+  "maxStationId": 100000
+}
