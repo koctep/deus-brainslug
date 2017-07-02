@@ -65,11 +65,16 @@
     </tr>
     <tr>
       <td colspan='2'>
+        <acl></acl>
+      </td>
+    </tr>
+    <tr>
+      <td colspan='2'>
         <md-input-container>
           <md-button ng-click='vm.hideId ? vm.update() : vm.add()'>Save</md-button>
           <md-button ng-click='vm.dismissChanges()'>Dismiss changes</md-button>
           <md-button ng-click='vm.erase()'>Erase all</md-button>
-          <md-button ng-click='vm.copy()'>Copy acls</md-button>
+          <md-button ng-click='vm.copyAcl()'>Copy acls</md-button>
         </md-input-container>
       </td>
     </tr>
