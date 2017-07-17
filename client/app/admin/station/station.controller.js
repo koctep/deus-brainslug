@@ -4,7 +4,7 @@ import template from './copy_acl.html';
 import controller from './copy_acl_controller';
 
 class StationController {
-  constructor($rootScope, $api, $stateParams, $cfg, $state, $mdToast, $mdDialog) {
+  constructor($rootScope, $api, $stateParams, $cfg, $state, $mdToast, $mdDialog, $mindStruct) {
     'ngInject';
 
     this.name = 'station';
@@ -17,22 +17,37 @@ class StationController {
     this.$cfg = $cfg;
     this.$root = $rootScope;
     this.$mdDialog = $mdDialog;
+    this.$mindStruct = $mindStruct;
 
     this.hideId = true;
-    this.station = {};
 
-    $rootScope.reload = function() {
-      if ($stateParams.id !== 'add') {
+    if ($stateParams.id === 'add') {
+      $rootScope.reload = function() {
+        console.debug("adding new station");
+        $this.hideId = false;
+        $this.station = {
+          acl: {}
+        };
+        angular.forEach($mindStruct.lines, function(v, k) {
+          console.debug('key %o', k);
+          $this.station.acl[k] = [];
+          for (var i = 0; i < v.names.length; i++) {
+            console.debug('adding %o%o', k, i);
+            $this.station.acl[k].push(0);
+          }
+        });
+      };
+    } else {
+      $rootScope.reload = function() {
         $api.getDoc($stateParams.id)
           .then(function(response) {
             console.debug("station is %o", response);
             $this.hideId = true;
             $this.station = response;
           });
-      } else {
-        $this.hideId = false;
-      }
-    };
+      };
+    }
+
     $rootScope.reload();
   }
 

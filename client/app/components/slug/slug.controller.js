@@ -1,5 +1,5 @@
 class SlugController {
-  constructor($rootScope, $api, $state) {
+  constructor($rootScope, $api, $state, $mindStruct) {
     'ngInject';
 
     if (!$rootScope.char || !$rootScope.station) {
@@ -8,6 +8,10 @@ class SlugController {
     }
     this.name = 'slug';
     this.char = $rootScope.char;
+    this.selected = Object.keys($mindStruct.lines)[0];
+    this.$mindStruct = $mindStruct;
+    this.$rootScope = $rootScope;
+
     let $this = this;
 
     console.debug("char %o", this.char);

@@ -14,6 +14,7 @@ import AppController from './app.controller';
 import Admin from './admin/admin';
 
 import appConfig from './app.config.json';
+import mindStruct from './mind.config.json';
 
 angular.module('app', [
   angularMaterial,
@@ -26,6 +27,7 @@ angular.module('app', [
 ])
 
 .constant('$cfgDefault', appConfig)
+.constant('$mindStruct', mindStruct)
 
 .config(($locationProvider, $qProvider, $urlRouterProvider, $httpProvider) => {
   "ngInject";

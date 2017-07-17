@@ -1,1 +1,18 @@
-<char-mind></char-mind>
+<div>
+  <h1>{{ vm.name }}</h1>
+  <select ng-model='vm.selected' ng-options='key as (key + " (" + value.class + ")") for (key,value) in vm.$mindStruct.lines'></select>
+  <table>
+    <tr ng-repeat='i in vm.$mindStruct.lines[vm.selected].names'>
+      <td>{{$parent.vm.selected + $index}}</td>
+      <td>
+        <md-input-container>
+          <label>{{i}}</label>
+          <input ng-model='vm.$rootScope.char.mind[vm.selected][$index]'>
+        </md-input-container>
+        <md-input-container>
+          <input type='range' ng-model='vm.$rootScope.char.mind[vm.selected][$index]'>
+        </md-input-container>
+      </td>
+  </table>
+  <md-button ng-click='vm.save()'>Save</md-button>
+</div>
