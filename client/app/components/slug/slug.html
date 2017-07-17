@@ -1,18 +1,18 @@
 <div>
   <h1>{{ vm.name }}</h1>
-  <select ng-model='vm.selected' ng-options='key as (key + " (" + value.class + ")") for (key,value) in vm.$mindStruct.lines'></select>
-  <table>
-    <tr ng-repeat='i in vm.$mindStruct.lines[vm.selected].names'>
-      <td>{{$parent.vm.selected + $index}}</td>
-      <td>
+  <div ng-repeat='(l, v) in vm.$mindStruct.lines'>
+    <div ng-repeat='i in $parent.vm.$mindStruct.lines[this.l].names'>
+      <div ng-if='$root.char.mind[$parent.l][$index]>=0'>
+        {{$parent.l + $index}}
         <md-input-container>
           <label>{{i}}</label>
-          <input ng-model='vm.$rootScope.char.mind[vm.selected][$index]'>
+          <input ng-model='$root.char.mind[$parent.l][$index]' ng-disabled='$root.station.acl[$parent.l][$index]<=1'>
         </md-input-container>
         <md-input-container>
-          <input type='range' ng-model='vm.$rootScope.char.mind[vm.selected][$index]'>
+          <input type='range' ng-model='$root.char.mind[$parent.l][$index]' ng-disabled='$root.station.acl[$parent.l][$index]<=1'>
         </md-input-container>
-      </td>
-  </table>
+      </div>
+    </div>
+  </div>
   <md-button ng-click='vm.save()'>Save</md-button>
 </div>

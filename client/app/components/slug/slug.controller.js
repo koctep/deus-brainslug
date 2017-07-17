@@ -1,3 +1,5 @@
+import angular from 'angular';
+
 class SlugController {
   constructor($rootScope, $api, $state, $mindStruct) {
     'ngInject';
@@ -15,19 +17,43 @@ class SlugController {
 
     let $this = this;
 
-    console.debug("char %o", this.char);
+    window.r = $rootScope;
+
+
+    var applyAcl = function() {
+      angular.forEach($rootScope.station.acl, function(v, k) {
+        for (var i = 0; i < v.length; i++) {
+          if (v[i] === 0) {
+            $rootScope.char.mind[k][i] = -1;
+          }
+        }
+      });
+    };
 
     $rootScope.reload = function() {
       $api.getDoc($rootScope.char._id)
         .then(function(newChar) {
-          $rootScope.char = newChar;
-          $this.char = $rootScope.char;
+          $this.char = newChar;
+          $this.$rootScope.char = newChar;
+          applyAcl();
         });
     };
+    applyAcl();
   }
 
   save() {
-    this.$api.patchDoc(this.$rootScope.char);
+    var $this = this;
+    this.$api.getDoc($this.$rootScope.char._id)
+      .then(function(char) {
+        angular.forEach($this.$rootScope.char.mind, function(v, k) {
+          for (var i = 0; i < v.length; i++) {
+            if ($this.$rootScope.char.mind[k][i] !== -1) {
+              char.mind[k][i] = $this.$rootScope.char.mind[k][i];
+            }
+          }
+        });
+        $this.$api.patchDoc(char);
+      });
   }
 
 }
