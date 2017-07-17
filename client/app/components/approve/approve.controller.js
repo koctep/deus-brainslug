@@ -37,7 +37,7 @@ class ApproveController {
 //        if (char.password === $this.password) {
         $this.$mdToast.showSimple("Access granted");
         $this.$rootScope.char = $this.filterCharDoc(char);
-        $this.$state.go('slug');
+        $this.$state.go('slug/mind');
 //        } else {
 //          failed();
 //        }

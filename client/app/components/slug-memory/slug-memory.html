@@ -1,0 +1,20 @@
+<div>
+  <h1>{{ vm.name }}</h1>
+  <div ng-repeat='m in vm.$rootScope.char.memory'>
+    <md-input-container>
+      <label>Title</label>
+      <input ng-model='$parent.vm.$rootScope.char.memory[$index].title'>
+    </md-input-container>
+    <br>
+    <md-input-container>
+      <label>Text</label>
+      <textarea ng-model='$parent.vm.$rootScope.char.memory[$index].text'></textarea>
+    </md-input-container>
+    <br>
+    <md-input-container>
+      <label>URL*</label>
+      <input ng-model='$parent.vm.$rootScope.char.memory[$index].url'>
+    </md-input-container>
+    <hr>
+  </div>
+</div>

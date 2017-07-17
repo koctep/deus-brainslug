@@ -40,13 +40,14 @@ angular.module('app', [
   $httpProvider.defaults.headers.post = {'Content-Type': 'application/json'};
 })
 
-.run(($rootScope, $cfg, $mdToast) => {
+.run(($rootScope, $cfg, $mdToast, $state) => {
   'ngInject';
 
   $rootScope.disabled = false;
   $rootScope.cfg = $cfg;
   window.r = $rootScope;
   window.r.mdToast = $mdToast;
+  window.r.state = $state;
 })
 
 .service('$cfg', function($http, $cfgDefault) {

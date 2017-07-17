@@ -1,9 +1,10 @@
 import angular from 'angular';
 
-class SlugController {
+class SlugMindController {
   constructor($rootScope, $api, $state, $mindStruct) {
     'ngInject';
 
+    console.debug('slug mind');
     if (!$rootScope.char || !$rootScope.station) {
       $state.go('init');
       return;
@@ -58,4 +59,4 @@ class SlugController {
 
 }
 
-export default SlugController;
+export default SlugMindController;
