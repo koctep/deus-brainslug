@@ -65,27 +65,22 @@
     </tr>
     <tr>
       <td colspan='2'>
-        <div>
-          <h1>Acl</h1>
-          <div ng-repeat='(letter,line) in vm.$mindStruct.lines'>
-            <table>
-              <tr>
-                <td rowspan='2'>{{letter}}/{{line.class}}</td>
-                <td ng-repeat='v in line.names'>
-                  {{$index}}/{{v}}
-                </td>
-              </tr>
-              <tr>
-                <td ng-repeat='v in line.names'>
-                  <select ng-model='vm.station.acl[$parent.letter][$index]'>
-                    <option ng-value='0'>None</option>
-                    <option ng-value='1'>Read</option>
-                    <option ng-value='3'>Read/Write</option>
-                  </select>
-                </td>
-            </table>
-          </div>
-        </div>
+        <h1>Acl</h1>
+        <select ng-model='vm.selected' ng-options='k as (k + " (" +v.class + ")") for (k,v) in vm.$mindStruct.lines'></select>
+        <table>
+          <tr ng-repeat='v in vm.$mindStruct.lines[vm.selected].names'>
+            <td>{{$parent.vm.selected + $index}}</td>
+            <td>{{v}}</td>
+            <td>
+              <select ng-model='$parent.vm.station.acl[$parent.vm.selected][$index]'>
+                <option ng-value='0'>None</option>
+                <option ng-value='1'>Read</option>
+                <option ng-value='3'>Read/Write</option>
+                <option ng-value='7'>extended Read/Write</option>
+              </select>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>
     <tr>

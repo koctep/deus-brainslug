@@ -20,6 +20,7 @@ class StationController {
     this.$mindStruct = $mindStruct;
 
     this.hideId = true;
+    this.selected = Object.keys($mindStruct.lines)[0];
 
     if ($stateParams.id === 'add') {
       $rootScope.reload = function() {
