@@ -38,12 +38,13 @@ angular.module('app', [
   $httpProvider.defaults.headers.post = {'Content-Type': 'application/json'};
 })
 
-.run(($rootScope, $cfg) => {
+.run(($rootScope, $cfg, $mdToast) => {
   'ngInject';
 
   $rootScope.disabled = false;
   $rootScope.cfg = $cfg;
   window.r = $rootScope;
+  window.r.mdToast = $mdToast;
 })
 
 .service('$cfg', function($http, $cfgDefault) {
@@ -137,19 +138,22 @@ angular.module('app', [
   });
 
   return {
-    lsStations: function() {
-      var res = $q.defer();
+    stations: {
+      ls: function() {
+        var res = $q.defer();
 
-      $couch.view('stations', {include_docs: true})
-        .then(function(response) {
-          var r = (response || []).map(function(v) {
-            return v.doc;
+        $couch.view('stations', {include_docs: true})
+          .then(function(response) {
+            var r = (response || []).map(function(v) {
+              return v.doc;
+            });
+            res.resolve(r);
           });
-          res.resolve(r);
-        });
-      return res.promise;
+        return res.promise;
+      }
     },
-    getStation: function(id) {
+    getDoc: function(id) {
+      console.debug("getting doc %o", id);
       var res = $q.defer();
 
       $couch.doc(id)
@@ -170,6 +174,19 @@ angular.module('app', [
     delete: function(doc) {
       doc._deleted = true;
       return this.publish(doc);
+    },
+    patchDoc: function(doc) {
+      var res = $q.defer();
+      let $this = this;
+      this.getDoc(doc._id)
+        .then(function(oldDoc) {
+          let newDoc = angular.extend(oldDoc, doc);
+          $this.publish(newDoc).
+            then(function(response) {
+              res.resolve(response);
+            });
+        });
+      return res.promise;
     }
   };
 })

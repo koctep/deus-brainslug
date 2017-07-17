@@ -9,7 +9,7 @@ class StationsController {
     this.stations = [];
 
     $rootScope.reload = function() {
-      $api.lsStations()
+      $api.stations.ls()
         .then(function(response) {
           console.debug("get %o", response);
           $this.stations = response || [];

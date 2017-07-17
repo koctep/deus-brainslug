@@ -1,16 +1,13 @@
 <div>
-  <h1>{{ vm.name }}</h1>
-  <div>
-    <md-input-container>
-      <label>Station ID</label>
-      <input ng-model='vm.station_id'>
-    </md-input-container>
-    <br>
-    <md-input-container>
-      <label>Password</label>
-      <input type='password' ng-model='vm.password'>
-    </md-input-container>
-    <br>
-    <md-button ng-click='vm.login()'>Login</md-button>
-  </div>
+  <md-input-container>
+    <label>Station ID</label>
+    <input name='station_id' ng-model='vm.station_id'>
+  </md-input-container>
+  <br>
+  <md-input-container>
+    <label>Password</label>
+    <input name='station-pass' type='password' ng-model='vm.password'>
+  </md-input-container>
+  <br>
+  <md-button ng-click='vm.login()'>Login</md-button>
 </div>

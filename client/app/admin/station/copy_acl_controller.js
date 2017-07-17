@@ -8,7 +8,7 @@ class CopyAclController {
 
     this.stations = [];
 
-    $api.lsStations()
+    $api.stations.ls()
       .then(function(stations) {
         $this.stations = stations;
       });

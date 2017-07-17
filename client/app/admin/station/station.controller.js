@@ -23,7 +23,7 @@ class StationController {
 
     $rootScope.reload = function() {
       if ($stateParams.id !== 'add') {
-        $api.getStation($stateParams.id)
+        $api.getDoc($stateParams.id)
           .then(function(response) {
             console.debug("station is %o", response);
             $this.hideId = true;
@@ -89,8 +89,9 @@ class StationController {
     })
     .then(function(stationId) {
       console.debug('copy acl from %o', stationId);
-      $this.$api.getStation(stationId)
+      $this.$api.getDoc(stationId)
         .then(function(station) {
+          console.debug("station %o", station);
           $this.station.acl = angular.extend({}, station.acl);
         });
     });
