@@ -11,6 +11,7 @@ class SlugController {
     this.selected = Object.keys($mindStruct.lines)[0];
     this.$mindStruct = $mindStruct;
     this.$rootScope = $rootScope;
+    this.$api = $api;
 
     let $this = this;
 
@@ -24,6 +25,11 @@ class SlugController {
         });
     };
   }
+
+  save() {
+    this.$api.patchDoc(this.$rootScope.char);
+  }
+
 }
 
 export default SlugController;
