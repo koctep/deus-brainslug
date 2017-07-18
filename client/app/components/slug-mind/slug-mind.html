@@ -1,15 +1,18 @@
+<ul>
+  <li><a ui-sref='slug/memory'>Slug memory</a></li>
+</ul>
 <div>
   <h1>{{ vm.name }}</h1>
   <div ng-repeat='(l, v) in vm.$mindStruct.lines'>
     <div ng-repeat='i in $parent.vm.$mindStruct.lines[this.l].names'>
-      <div ng-if='$root.char.mind[$parent.l][$index]>=0'>
+      <div ng-if='$root.char.viewModel.mind[$parent.l][$index]>=0'>
         {{$parent.l + $index}}
         <md-input-container>
           <label ng-if='$rootScope.station.admin'>{{i}}</label>
-          <input ng-model='$root.char.mind[$parent.l][$index]' ng-disabled='$root.station.acl[$parent.l][$index]<=1'>
+          <input ng-model='$root.char.viewModel.mind[$parent.l][$index]' ng-disabled='$root.station.acl[$parent.l][$index]<=1'>
         </md-input-container>
         <md-input-container>
-          <input type='range' ng-model='$root.char.mind[$parent.l][$index]' ng-disabled='$root.station.acl[$parent.l][$index]<=1'>
+          <input type='range' ng-model='$root.char.viewModel.mind[$parent.l][$index]' ng-disabled='$root.station.acl[$parent.l][$index]<=1'>
         </md-input-container>
       </div>
     </div>

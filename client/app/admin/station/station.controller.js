@@ -4,13 +4,13 @@ import template from './copy_acl.html';
 import controller from './copy_acl_controller';
 
 class StationController {
-  constructor($rootScope, $api, $stateParams, $cfg, $state, $mdToast, $mdDialog, $mindStruct) {
+  constructor($rootScope, $stations, $stateParams, $cfg, $state, $mdToast, $mdDialog, $mindStruct) {
     'ngInject';
 
     this.name = 'station';
 
     let $this = this;
-    this.$api = $api;
+    this.$stations = $stations;
     this.$stateParams = $stateParams;
     this.$state = $state;
     this.$mdToast = $mdToast;
@@ -27,7 +27,12 @@ class StationController {
         console.debug("adding new station");
         $this.hideId = false;
         $this.station = {
-          acl: {}
+          acl: {},
+          memory: {
+            first: false,
+            second: false,
+            other: false
+          }
         };
         angular.forEach($mindStruct.lines, function(v, k) {
           console.debug('key %o', k);
@@ -40,7 +45,7 @@ class StationController {
       };
     } else {
       $rootScope.reload = function() {
-        $api.getDoc($stateParams.id)
+        $stations.get($stateParams.id)
           .then(function(response) {
             console.debug("station is %o", response);
             $this.hideId = true;
@@ -55,7 +60,8 @@ class StationController {
   update() {
     var $this = this;
     this.station.type = 'station';
-    this.$api.publish($this.station)
+    console.debug('$st %o', this.$stations);
+    this.$stations.set($this.station)
       .then(function() {
         $this.$state.go('stations');
       });
@@ -89,7 +95,7 @@ class StationController {
   delete() {
     if (!confirm('Are sure want to delete this station?')) { return; }
     var $this = this;
-    this.$api.delete(this.station)
+    this.$stations.delete(this.station)
       .then(function() {
         $this.$state.go('stations');
       });
@@ -105,7 +111,7 @@ class StationController {
     })
     .then(function(stationId) {
       console.debug('copy acl from %o', stationId);
-      $this.$api.getDoc(stationId)
+      $this.$stations.get(stationId)
         .then(function(station) {
           console.debug("station %o", station);
           $this.station.acl = angular.extend({}, station.acl);

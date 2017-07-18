@@ -1,5 +1,5 @@
 class StationsController {
-  constructor($rootScope, $api) {
+  constructor($rootScope, $stations) {
     'ngInject';
 
     this.name = 'stations';
@@ -9,7 +9,7 @@ class StationsController {
     this.stations = [];
 
     $rootScope.reload = function() {
-      $api.stations.ls()
+      $stations.ls()
         .then(function(response) {
           console.debug("get %o", response);
           $this.stations = response || [];

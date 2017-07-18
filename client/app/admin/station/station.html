@@ -65,7 +65,26 @@
     </tr>
     <tr>
       <td colspan='2'>
-        <h1>Acl</h1>
+        <h1>Memory acl</h1>
+        <md-input-container>
+          <label>First</label>
+          <input type='checkbox' ng-model='vm.station.memory.first'>
+        </md-input-container>
+        <br>
+        <md-input-container>
+          <label>Second</label>
+          <input type='checkbox' ng-model='vm.station.memory.second'>
+        </md-input-container>
+        <br>
+        <md-input-container>
+          <label>Other</label>
+          <input type='checkbox' ng-model='vm.station.memory.other'>
+        </md-input-container>
+      </td>
+    </tr>
+    <tr>
+      <td colspan='2'>
+        <h1>Mind acl</h1>
         <select ng-model='vm.selected' ng-options='k as (k + " (" +v.class + ")") for (k,v) in vm.$mindStruct.lines'></select>
         <table>
           <tr ng-repeat='v in vm.$mindStruct.lines[vm.selected].names'>

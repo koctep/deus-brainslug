@@ -1,8 +1,8 @@
 class InitController {
-  constructor($api, $state, $mdToast, $rootScope) {
+  constructor($stations, $state, $mdToast, $rootScope) {
     'ngInject';
 
-    this.$api = $api;
+    this.$stations = $stations;
     this.$state = $state;
     this.$mdToast = $mdToast;
     this.$rootScope = $rootScope;
@@ -17,7 +17,7 @@ class InitController {
       $this.password = "";
       delete $this.station;
     };
-    this.$api.getDoc(this.station_id)
+    this.$stations.get(this.station_id)
       .then(function(station) {
         if (station.password === $this.password) {
           $this.$mdToast.showSimple("password accepted for '" + station.name + "'");

@@ -1,20 +1,32 @@
+<ul>
+<li><a ui-sref='slug/mind'>Slug mind</a></li>
+</ul>
 <div>
   <h1>{{ vm.name }}</h1>
-  <div ng-repeat='m in vm.$rootScope.char.memory'>
-    <md-input-container>
-      <label>Title</label>
-      <input ng-model='$parent.vm.$rootScope.char.memory[$index].title'>
-    </md-input-container>
-    <br>
-    <md-input-container>
-      <label>Text</label>
-      <textarea ng-model='$parent.vm.$rootScope.char.memory[$index].text'></textarea>
-    </md-input-container>
-    <br>
-    <md-input-container>
-      <label>URL*</label>
-      <input ng-model='$parent.vm.$rootScope.char.memory[$index].url'>
-    </md-input-container>
-    <hr>
+  <div ng-repeat='m in vm.$rootScope.char.viewModel.memory'>
+    <div ng-if='($index == 0 && $root.station.memory.first) || ($index == 1 && $root.station.memory.second) || ($index > 1 && $root.station.memory.other)'>
+      <md-input-container>
+        <label>Title</label>
+        <input ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].title'>
+      </md-input-container>
+      <br>
+      <md-input-container>
+        <label>Text</label>
+        <textarea ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].text'></textarea>
+      </md-input-container>
+      <br>
+      <md-input-container>
+        <label>URL*</label>
+        <input ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].url'>
+      </md-input-container>
+      <md-input-container>
+        <label>delete</label>
+        <input type='checkbox' ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].removed'>
+      <hr>
+    </div>
   </div>
+  <div ng-if='$root.station.memory.other'>
+    <md-button ng-click='vm.$rootScope.char.viewModel.memory.push({added: true})'>Add</md-button>
+  </div>
+  <md-button ng-click='vm.save()'>Save</md-button>
 </div>

@@ -1,7 +1,7 @@
 import angular from 'angular';
 
 class SlugMindController {
-  constructor($rootScope, $api, $state, $mindStruct) {
+  constructor($rootScope, $char, $state, $mindStruct) {
     'ngInject';
 
     console.debug('slug mind');
@@ -14,7 +14,7 @@ class SlugMindController {
     this.selected = Object.keys($mindStruct.lines)[0];
     this.$mindStruct = $mindStruct;
     this.$rootScope = $rootScope;
-    this.$api = $api;
+    this.$char = $char;
 
     let $this = this;
 
@@ -25,14 +25,14 @@ class SlugMindController {
       angular.forEach($rootScope.station.acl, function(v, k) {
         for (var i = 0; i < v.length; i++) {
           if (v[i] === 0) {
-            $rootScope.char.mind[k][i] = -1;
+            $rootScope.char.viewModel.mind[k][i] = -1;
           }
         }
       });
     };
 
     $rootScope.reload = function() {
-      $api.getDoc($rootScope.char._id)
+      $char.getDoc($rootScope.creds.char.id, $rootScope.creds.char.password)
         .then(function(newChar) {
           $this.char = newChar;
           $this.$rootScope.char = newChar;
@@ -44,17 +44,18 @@ class SlugMindController {
 
   save() {
     var $this = this;
-    this.$api.getDoc($this.$rootScope.char._id)
-      .then(function(char) {
-        angular.forEach($this.$rootScope.char.mind, function(v, k) {
-          for (var i = 0; i < v.length; i++) {
-            if ($this.$rootScope.char.mind[k][i] !== -1) {
-              char.mind[k][i] = $this.$rootScope.char.mind[k][i];
-            }
-          }
-        });
-        $this.$api.patchDoc(char);
-      });
+    var action = [];
+    angular.forEach($this.$rootScope.char.viewModel.mind, function(v, k) {
+      for (var i = 0; i < v.length; i++) {
+        if ($this.$rootScope.char.viewModel.mind[k][i] !== -1) {
+          action.push('' + k + i + '=' + $this.$rootScope.char.viewModel.mind[k][i]);
+          //char.viewModel.mind[k][i] = $this.$rootScope.char.viewModel.mind[k][i];
+        }
+      }
+    });
+    console.debug('change %o', action.join(','));
+    this.$char.event('change-mind-cube', {operations: action.join(',')});
+    //$this.$char.set(char);
   }
 
 }

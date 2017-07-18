@@ -45,6 +45,11 @@ angular.module('app', [
 
   $rootScope.disabled = false;
   $rootScope.cfg = $cfg;
+  $rootScope.creds = {
+    char: null,
+    station: null,
+    operator: null
+  };
   window.r = $rootScope;
   window.r.mdToast = $mdToast;
   window.r.state = $state;
@@ -127,6 +132,119 @@ angular.module('app', [
   };
 })
 
+.service('$base64', function() {
+  return {
+    encode: function b64EncodeUnicode(str) {
+      // first we use encodeURIComponent to get percent-encoded UTF-8,
+      // then we convert the percent encodings into raw bytes which
+      // can be fed into btoa.
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+            function toSolidBytes(match, p1) {
+              return String.fromCharCode('0x' + p1);
+            }));
+    }
+  };
+})
+
+.service('$stations', ['$q', '$http', '$cfg', '$base64', ($q, $http, $cfg, $base64) => {
+  var config =  {
+    headers: {
+      Authorization: 'Basic ' + $base64.encode('mind-admin:5yfzcQAw')
+    }
+  };
+
+  return {
+    ls: function() {
+      var res = $q.defer();
+
+      $http.get('https://alice.digital:6984/mind-editor/_all_docs?include_docs=true', config)
+        .then(function(data) {
+          var stations = [];
+          angular.forEach(data.data.rows, function(v) {
+            stations.push(v.doc);
+          });
+          res.resolve(stations);
+        });
+
+      return res.promise;
+    },
+    get: function(id) {
+      var res = $q.defer();
+
+      $http.get('https://alice.digital:6984/mind-editor/' + id, config)
+        .then(function(data) {
+          res.resolve(data.data);
+        });
+
+      return res.promise;
+    },
+    set: function(id) {
+      var res = $q.defer();
+
+      $http.post('https://alice.digital:6984/mind-editor', id, config)
+        .then(function(data) {
+          res.resolve(data);
+        });
+      return res.promise;
+    },
+    delete: function(station) {
+      var res = $q.defer();
+
+      $http.delete('https://alice.digital:6984/mind-editor/' + station._id + '?rev=' + station._rev, config)
+        .then(function(data) {
+          res.resolve(data);
+        });
+      return res.promise;
+    }
+  };
+}])
+
+.service('$char', ['$http', '$base64', '$q', '$rootScope', function($http, $base64, $q, $rootScope) {
+  return {
+    get: function(id, password) {
+      var res = $q.defer();
+
+      var config = {
+        headers: {
+          Authorization: 'Basic ' + $base64.encode(id + ':' + password)
+        }
+      };
+
+      $http.get('https://alice.digital/api/viewmodel/' + id + '?type=medic', config)
+        .then(function(data) {
+          console.debug('recv %o', data);
+          res.resolve(data.data);
+        });
+
+      return res.promise;
+    },
+    event: function(eventType, data) {
+      var res = $q.defer();
+
+      $http.get('https://alice.digital/api/time')
+        .then(function(timeResp) {
+          var req = {
+            eventType: eventType,
+            data: data,
+            characterId: $rootScope.creds.char.id,
+            timestamp: timeResp.data.serverTime
+          };
+          console.debug('req %o', req);
+          var config = {
+            headers: {
+              Authorization: 'Basic ' + $base64.encode($rootScope.creds.char.id + ':' + $rootScope.creds.char.password)
+            }
+          };
+          $http.post('https://alice.digital/api/events/' + $rootScope.creds.char.id, {events: [req]}, config)
+            .then(function(resp) {
+              res.resolve(resp);
+            });
+        });
+      return res.promise;
+    }
+  };
+}])
+
 .service('$api', ($couch, $rootScope, $reloader, $q)  => {
   'ngInject';
 
@@ -141,20 +259,6 @@ angular.module('app', [
   });
 
   return {
-    stations: {
-      ls: function() {
-        var res = $q.defer();
-
-        $couch.view('stations', {include_docs: true})
-          .then(function(response) {
-            var r = (response || []).map(function(v) {
-              return v.doc;
-            });
-            res.resolve(r);
-          });
-        return res.promise;
-      }
-    },
     getDoc: function(id) {
       console.debug("getting doc %o", id);
       var res = $q.defer();

@@ -1,5 +1,5 @@
 class CopyAclController {
-  constructor($mdDialog, $api) {
+  constructor($mdDialog, $stations) {
     'ngInject';
 
     var $this = this;
@@ -8,7 +8,7 @@ class CopyAclController {
 
     this.stations = [];
 
-    $api.stations.ls()
+    $stations.ls()
       .then(function(stations) {
         $this.stations = stations;
       });

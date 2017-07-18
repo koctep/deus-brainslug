@@ -1,13 +1,13 @@
 import angular from 'angular';
 
 class ApproveController {
-  constructor($rootScope, $mdToast, $api, $state) {
+  constructor($rootScope, $mdToast, $char, $state) {
     'ngInject';
 
     this.name = 'approve';
     this.$rootScope = $rootScope;
     this.$mdToast = $mdToast;
-    this.$api = $api;
+    this.$char = $char;
     this.$state = $state;
 
     let $this = this;
@@ -31,13 +31,17 @@ class ApproveController {
       $this.password = '';
       delete $this.char;
     };
-    this.$api.getDoc(this.char_id)
+    this.$char.get(this.char_id, this.password)
       .then(function(char) {
-        console.debug('got char doc');
+        console.debug('got char doc %o', char);
 //        if (char.password === $this.password) {
         $this.$mdToast.showSimple("Access granted");
         $this.$rootScope.char = $this.filterCharDoc(char);
         $this.$state.go('slug/mind');
+        $this.$rootScope.creds.char = {
+          id: $this.char_id,
+          password: $this.password
+        };
 //        } else {
 //          failed();
 //        }
@@ -46,6 +50,7 @@ class ApproveController {
   }
 
   filterCharDoc(doc) {
+    return doc;
     let res = {};
     let props = ['_id', 'firstName', 'nicName', 'lastName', 'sex', 'mind', 'memory'];
     angular.forEach(props, function(p) {
