@@ -227,7 +227,7 @@ angular.module('app', [
             eventType: eventType,
             data: data,
             characterId: $rootScope.creds.char.id,
-            timestamp: timeResp.data.serverTime
+            timestamp: timeResp.data.serverTime + 5000
           };
           console.debug('req %o', req);
           var config = {
