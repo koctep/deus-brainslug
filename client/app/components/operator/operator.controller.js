@@ -1,10 +1,10 @@
 import angular from 'angular';
 
-class ApproveController {
+class OperatorController {
   constructor($rootScope, $mdToast, $char, $state) {
     'ngInject';
 
-    this.name = 'approve';
+    this.name = 'operator';
     this.$rootScope = $rootScope;
     this.$mdToast = $mdToast;
     this.$char = $char;
@@ -17,7 +17,7 @@ class ApproveController {
         $state.go('init');
       } else {
         setTimeout(function() {
-          $this.char_id = '';
+          $this.operator_id = '';
           $this.password = '';
         }, 500);
       }
@@ -29,26 +29,25 @@ class ApproveController {
     let $this = this;
     let failed = function() {
       $this.$mdToast.showSimple("password or ID is wrong");
-      $this.char_id = '';
+      $this.operator_id = '';
       $this.password = '';
-      delete $this.char;
+      delete $this.operator;
     };
-    this.$char.get(this.char_id, this.password)
-      .then(function(char) {
-        console.debug('got char doc %o', char);
-        console.debug('is equal %o', angular.equals(char.viewModel.mind, char.viewModel.mindBase));
-        $this.$mdToast.showSimple("Access granted");
-        $this.$rootScope.char = $this.filterCharDoc(char);
-        $this.$state.go('slug/' + $this.$rootScope.program);
-        $this.$rootScope.creds.char = {
-          id: $this.char_id,
+    this.$char.get(this.operator_id, this.password)
+      .then(function(operator) {
+        console.debug('got operator doc %o', operator);
+        $this.$mdToast.showSimple("Operator logged in");
+        $this.$rootScope.operator = $this.filterOperatorDoc(operator);
+        $this.$state.go('approve');
+        $this.$rootScope.creds.operator = {
+          id: $this.operator_id,
           password: $this.password
         };
       })
       .catch(failed);
   }
 
-  filterCharDoc(doc) {
+  filterOperatorDoc(doc) {
     return doc;
     let res = {};
     let props = ['_id', 'firstName', 'nicName', 'lastName', 'sex', 'mind', 'memory'];
@@ -59,4 +58,4 @@ class ApproveController {
   }
 }
 
-export default ApproveController;
+export default OperatorController;

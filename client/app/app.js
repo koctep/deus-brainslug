@@ -218,24 +218,26 @@ angular.module('app', [
 
       return res.promise;
     },
-    event: function(eventType, data) {
+    event: function(eventType, data, c) {
       var res = $q.defer();
+
+      var char = c || $rootScope.creds.char;
 
       $http.get('https://alice.digital/api/time')
         .then(function(timeResp) {
           var req = {
             eventType: eventType,
             data: data,
-            characterId: $rootScope.creds.char.id,
+            characterId: char.id,
             timestamp: timeResp.data.serverTime + 5000
           };
           console.debug('req %o', req);
           var config = {
             headers: {
-              Authorization: 'Basic ' + $base64.encode($rootScope.creds.char.id + ':' + $rootScope.creds.char.password)
+              Authorization: 'Basic ' + $base64.encode(char.id + ':' + char.password)
             }
           };
-          $http.post('https://alice.digital/api/events/' + $rootScope.creds.char.id, {events: [req]}, config)
+          $http.post('https://alice.digital/api/events/' + char.id, {events: [req]}, config)
             .then(function(resp) {
               res.resolve(resp);
             });
@@ -317,6 +319,12 @@ angular.module('app', [
     return reloader;
   };
   return reloader;
+})
+
+.service('mindAction', function() {
+  return function(v) {
+    return v.key + (v.value > 0 ? '+' : '') + v.value;
+  };
 })
 
 .controller(AppController.name, AppController)

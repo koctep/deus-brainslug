@@ -1,0 +1,13 @@
+<div>
+  <h1>{{ vm.name }}</h1>
+  <div>Оператор выбрал карту<br>
+    <input type='radio' name='operator' value='support' ng-model='vm.operator'>Поддержка<br>
+    <input type='radio' name='operator' value='frustration' ng-model='vm.operator'>Фрустрация
+  </div>
+  <br>
+  <div>Пациент выбрал карту<br>
+    <input type='radio' name='client' value='aliance' ng-model='vm.client'>Альянс<br>
+    <input type='radio' name='client' value='agro' ng-model='vm.client'>Сопротивление<br>
+  </div>
+  <md-button ng-click='vm.save()'>Save</md-button>
+</div>

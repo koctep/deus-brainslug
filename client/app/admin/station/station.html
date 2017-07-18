@@ -68,17 +68,29 @@
         <h1>Memory acl</h1>
         <md-input-container>
           <label>First</label>
-          <input type='checkbox' ng-model='vm.station.memory.first'>
+          <select ng-model='vm.station.memory.first'>
+            <option ng-value='0'>None</option>
+            <option ng-value='1'>Read</option>
+            <option ng-value='3'>Read/Write</option>
+          </select>
         </md-input-container>
         <br>
         <md-input-container>
           <label>Second</label>
-          <input type='checkbox' ng-model='vm.station.memory.second'>
+          <select ng-model='vm.station.memory.second'>
+            <option ng-value='0'>None</option>
+            <option ng-value='1'>Read</option>
+            <option ng-value='3'>Read/Write</option>
+          </select>
         </md-input-container>
         <br>
         <md-input-container>
           <label>Other</label>
-          <input type='checkbox' ng-model='vm.station.memory.other'>
+          <select ng-model='vm.station.memory.other'>
+            <option ng-value='0'>None</option>
+            <option ng-value='1'>Read</option>
+            <option ng-value='3'>Read/Write</option>
+          </select>
         </md-input-container>
       </td>
     </tr>
@@ -95,7 +107,6 @@
                 <option ng-value='0'>None</option>
                 <option ng-value='1'>Read</option>
                 <option ng-value='3'>Read/Write</option>
-                <option ng-value='7'>extended Read/Write</option>
               </select>
             </td>
           </tr>

@@ -1,7 +1,7 @@
 import angular from 'angular';
 
 class SlugMindController {
-  constructor($rootScope, $char, $state, $mindStruct) {
+  constructor($rootScope, $char, $state, $mindStruct, mindAction) {
     'ngInject';
 
     console.debug('slug mind');
@@ -15,6 +15,8 @@ class SlugMindController {
     this.$mindStruct = $mindStruct;
     this.$rootScope = $rootScope;
     this.$char = $char;
+    this.mindAction = mindAction;
+    this.$state = $state;
 
     let $this = this;
 
@@ -25,7 +27,7 @@ class SlugMindController {
       angular.forEach($rootScope.station.acl, function(v, k) {
         for (var i = 0; i < v.length; i++) {
           if (v[i] === 0) {
-            $rootScope.char.viewModel.mind[k][i] = -1;
+            $rootScope.char.viewModel.mindBase[k][i] = -1;
           }
         }
       });
@@ -45,16 +47,24 @@ class SlugMindController {
   save() {
     var $this = this;
     var action = [];
-    angular.forEach($this.$rootScope.char.viewModel.mind, function(v, k) {
-      for (var i = 0; i < v.length; i++) {
-        if ($this.$rootScope.char.viewModel.mind[k][i] !== -1) {
-          action.push('' + k + i + '=' + $this.$rootScope.char.viewModel.mind[k][i]);
-          //char.viewModel.mind[k][i] = $this.$rootScope.char.viewModel.mind[k][i];
-        }
-      }
-    });
-    console.debug('change %o', action.join(','));
-    this.$char.event('change-mind-cube', {operations: action.join(',')});
+    this.$char.get(this.$rootScope.creds.char.id, this.$rootScope.creds.char.password)
+      .then(function(char) {
+        angular.forEach($this.$rootScope.char.viewModel.mindBase, function(v, k) {
+          for (var i = 0; i < v.length; i++) {
+            if ($this.$rootScope.char.viewModel.mindBase[k][i] !== -1 &&
+                $this.$rootScope.char.viewModel.mindBase[k][i] !== char.viewModel.mindBase[k][i]) {
+              action.push({key: k + i, value: $this.$rootScope.char.viewModel.mindBase[k][i] - char.viewModel.mindBase[k][i]});
+              console.debug('change %o', action);
+              //console.debug('maped %o', action.map($this.mindAction));
+              $this.$char.event('change-mind-cube', {operations: action.map($this.mindAction).join(',')});
+              console.debug('published');
+              $this.$rootScope.changed = action;
+              console.debug('changing state');
+              $this.$state.go('feedback');
+            }
+          }
+        });
+      });
     //$this.$char.set(char);
   }
 

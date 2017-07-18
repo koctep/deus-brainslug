@@ -1,27 +1,27 @@
-<ul>
-<li><a ui-sref='slug/mind'>Slug mind</a></li>
-</ul>
 <div>
-  <h1>{{ vm.name }}</h1>
+  <div><h3>Description</h3>{{$root.station.description.operator}}</div><br>
   <div ng-repeat='m in vm.$rootScope.char.viewModel.memory'>
     <div ng-if='($index == 0 && $root.station.memory.first) || ($index == 1 && $root.station.memory.second) || ($index > 1 && $root.station.memory.other)'>
       <md-input-container>
-        <label>Title</label>
-        <input ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].title'>
+      <label>Title</label>
+      <input
+        ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].title'
+        ng-disabled='($index == 0 && $root.station.memory.first == 1) || ($index == 1 && $root.station.memory.second == 1) || ($index > 1 && $root.station.memory.other == 1)'>
       </md-input-container>
       <br>
       <md-input-container>
         <label>Text</label>
-        <textarea ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].text'></textarea>
+        <textarea
+          ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].text'
+          ng-disabled='($index == 0 && $root.station.memory.first == 1) || ($index == 1 && $root.station.memory.second == 1) || ($index > 1 && $root.station.memory.other == 1)'></textarea>
       </md-input-container>
       <br>
       <md-input-container>
         <label>URL*</label>
-        <input ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].url'>
+        <input
+          ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].url'
+          ng-disabled='($index == 0 && $root.station.memory.first == 1) || ($index == 1 && $root.station.memory.second == 1) || ($index > 1 && $root.station.memory.other == 1)'>
       </md-input-container>
-      <md-input-container>
-        <label>delete</label>
-        <input type='checkbox' ng-model='$parent.vm.$rootScope.char.viewModel.memory[$index].removed'>
       <hr>
     </div>
   </div>

@@ -29,9 +29,9 @@ class StationController {
         $this.station = {
           acl: {},
           memory: {
-            first: false,
-            second: false,
-            other: false
+            first: 0,
+            second: 0,
+            other: 0
           }
         };
         angular.forEach($mindStruct.lines, function(v, k) {
